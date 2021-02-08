@@ -39,15 +39,24 @@ Route::post('/callback/send/{request_id}', function ($requestId, Request $reques
 
     try {
 
-        $requestModel = RequestModel::where('request_id', $requestId)
-            ->firstOrFail();
-
-        $requestModel->update([
+        $requestData = [
             'payload' => $request->all(),
             'request_headers' => $request->header(),
             'received_datetime' => now(),
             'received' => true,
-        ]);
+        ];
+
+        $requestModel = RequestModel::where('request_id', $requestId)
+            ->firstOrFail();
+
+        $requestModel->update($requestData);
+
+        $requestModel->payloadHistories()->create(
+            array_merge($requestData, [
+                'request_id' => $requestId,
+                'request_datetime' => $requestModel->request_datetime,
+            ])
+        );
 
         Log::debug(json_encode($request->all()));
 

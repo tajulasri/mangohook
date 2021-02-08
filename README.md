@@ -7,6 +7,28 @@
 ## Usages
 
 
+**Ping our callback server to make sure its live.**
+
+`POST /api/ping`
+
+`GET /api/ping`
+
+**Request**
+```curl
+    curl -X POST http://localhost:8001/api/ping
+```
+
+
+**Response**
+
+```json
+{
+    "status_code": 200,
+    "message": "OK"
+}
+```
+
+
 **Initiate request session for callback url and use generated callback url to pass to your provider.**
 
 `POST /api/initiate`

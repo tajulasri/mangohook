@@ -24,6 +24,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::match(['get', 'post'], '/ping', function (Request $request) {
+    return response()->json(['status_code' => Response::HTTP_OK, 'message' => 'OK']);
+});
+
 //api/initiate
 Route::post('/initiate', function (Request $request) {
 
@@ -65,7 +69,7 @@ Route::post('/verify', function (Request $request) {
 
         $requestModel = RequestModel::where('request_id', $request->request_id)->firstOrFail();
 
-        return response()->json(['data' => $requestModel]);
+        return response()->json(['data' => $requestModel, 'status_code' => Response::HTTP_OK]);
 
     } catch (ValidationException | Exception $e) {
 
